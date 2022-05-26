@@ -14,12 +14,15 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
+
+
+
 async function run() {
     try {
         await client.connect();
         const serviceCollection = client.db('parts_supplier').collection('services');
         const bookingCollection = client.db('parts_supplier').collection('purchase');
-
+        // const userCollection = client.db('parts_supplier').collection('users');
 
         app.get('/service', async (req, res) => {
             const query = {};
@@ -35,12 +38,24 @@ async function run() {
             res.send(service);
         });
 
+
+        app.get('/booking', async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email };
+            const bookings = await bookingCollection.find(query).toArray();
+            res.send(bookings);
+        })
+
         // POST 
-        app.post('/purchase', async (req, res) => {
+        app.post('/booking', async (req, res) => {
             const newProduct = req.body;
             const result = await bookingCollection.insertOne(newProduct);
             res.send(result);
-        })
+        });
+
+
+
+
 
     }
     finally {
