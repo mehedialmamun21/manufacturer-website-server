@@ -60,6 +60,14 @@ async function run() {
             res.send(users);
         });
 
+        // DELETE // verifyAdmin,
+        app.delete('/user/:email', verifyJWT, async (req, res) => {
+            const email = req.params.email;
+            const filter = { email: email };
+            const result = await userCollection.deleteOne(filter);
+            res.send(result);
+        })
+
         app.get('/admin/:email', async (req, res) => {
             const email = req.params.email;
             const user = await userCollection.findOne({ email: email });
@@ -125,7 +133,7 @@ async function run() {
             res.send(result);
         });
 
-        // DELETE // verifyAdmin,
+        // DELETE 
         app.delete('/booking/:email', verifyJWT, async (req, res) => {
             const email = req.params.email;
             const filter = { email: email }
