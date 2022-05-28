@@ -47,6 +47,13 @@ async function run() {
             res.send(services);
         });
 
+        app.get('/manage', async (req, res) => {
+            const query = {};
+            const cursor = bookingCollection.find(query);
+            const manages = await cursor.toArray();
+            res.send(manages);
+        });
+
         // POST
 
         app.post('/service', async (req, res) => {
@@ -60,7 +67,7 @@ async function run() {
             res.send(users);
         });
 
-        // DELETE // verifyAdmin,
+        // DELETE 
         app.delete('/user/:email', verifyJWT, async (req, res) => {
             const email = req.params.email;
             const filter = { email: email };
@@ -132,14 +139,6 @@ async function run() {
             const result = await bookingCollection.insertOne(newProduct);
             res.send(result);
         });
-
-        // DELETE 
-        app.delete('/booking/:email', verifyJWT, async (req, res) => {
-            const email = req.params.email;
-            const filter = { email: email }
-            const result = await bookingCollection.deleteOne(filter);
-            res.send(result);
-        })
 
         // DELETE
         app.delete('/service/:id', async (req, res) => {
