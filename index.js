@@ -47,6 +47,14 @@ async function run() {
             res.send(services);
         });
 
+        // POST
+
+        app.post('/service', async (req, res) => {
+            const newProduct = req.body;
+            const result = await serviceCollection.insertOne(newProduct);
+            res.send(result);
+        })
+
         app.get('/user', verifyJWT, async (req, res) => {
             const users = await userCollection.find().toArray();
             res.send(users);
@@ -116,9 +124,6 @@ async function run() {
             const result = await bookingCollection.insertOne(newProduct);
             res.send(result);
         });
-
-
-
 
 
     }
