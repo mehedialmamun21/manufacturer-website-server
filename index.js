@@ -38,6 +38,7 @@ async function run() {
         const serviceCollection = client.db('parts_supplier').collection('services');
         const bookingCollection = client.db('parts_supplier').collection('purchase');
         const userCollection = client.db('parts_supplier').collection('users');
+        const reviewCollection = client.db('parts_supplier').collection('reviews');
 
 
         app.get('/service', async (req, res) => {
@@ -61,6 +62,17 @@ async function run() {
             const result = await serviceCollection.insertOne(newProduct);
             res.send(result);
         })
+
+
+        // POST
+
+        app.post('/review', async (req, res) => {
+            const newReview = req.body;
+            const result = await reviewCollection.insertOne(newReview);
+            res.send(result);
+        })
+
+
 
         app.get('/user', verifyJWT, async (req, res) => {
             const users = await userCollection.find().toArray();
